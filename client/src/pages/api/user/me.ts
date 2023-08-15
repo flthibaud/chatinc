@@ -1,7 +1,7 @@
 import axios from 'axios';
 import cookie from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { decodeBase64ToJson } from '@/utils/encode';
+import { decodeBase64ToJson } from '@/utils/base64';
 
 interface TokenObject {
   message: string;
@@ -35,6 +35,6 @@ export default async function me( req: NextApiRequest, res: NextApiResponse ) {
     res.status( 200 ).json( data );
   } catch (err) {
     console.log(err);
-    res.status( 401 ).end( 'Unauthorized' );
+    res.status( 401 ).json( { message: 'User unauthorized' });
   }
 }

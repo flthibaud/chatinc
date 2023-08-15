@@ -37,7 +37,7 @@ export default class GoogleSignInsController {
      */
     const user = await googleUser.user()
 
-    console.log(user)
+    // console.log(user)
 
     const findUser = {
       email: user.email as string,
@@ -45,6 +45,10 @@ export default class GoogleSignInsController {
 
     const userDetails = {
       email: user.email as string,
+      avatar: user.avatarUrl as string,
+      username: user.nickName as string,
+      first_name: user.original.given_name as string,
+      last_name: user.original.family_name as string,
       provider_id: user.id as string,
       provider: 'google',
     }
