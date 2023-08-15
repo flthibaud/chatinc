@@ -12,6 +12,7 @@ export default class extends BaseSchema {
       table.string('username').nullable()
       table.string('first_name').nullable()
       table.string('last_name').nullable()
+      table.string('about').nullable()
       table.string('remember_me_token').nullable()
       table.string('provider')
       table.string('provider_id')

@@ -6,12 +6,16 @@ import { HYDRATE } from "next-redux-wrapper";
 export interface AuthState {
   authState: boolean;
   userInfo: any;
+  contactsPage: boolean;
+  currentChatUser: any;
 }
 
 // Initial state
 const initialState: AuthState = {
   authState: false,
   userInfo: undefined,
+  contactsPage: false,
+  currentChatUser: null,
 };
 
 // Actual Slice
@@ -26,6 +30,15 @@ export const authSlice = createSlice({
     setUserInfo(state, action) {
       state.userInfo = action.payload;
     },
+    setAllContactsPage(state) {
+      return {
+        ...state,
+        contactsPage: !state.contactsPage,
+      };
+    },
+    setCurrentChatUser(state, action) {
+      state.currentChatUser = action.payload;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -39,7 +52,12 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setAuthState, setUserInfo } = authSlice.actions;
+export const {
+  setAuthState,
+  setUserInfo,
+  setAllContactsPage,
+  setCurrentChatUser,
+} = authSlice.actions;
 
 export const selectAuthState = (state: AppState) => state.auth.authState;
 

@@ -29,3 +29,6 @@ Route.get('/user', 'AuthController.getUser').middleware('auth')
 // AUTH ROUTES
 Route.post('/register', 'AuthController.register')
 Route.post('/login', 'AuthController.login')
+
+// USER ROUTES
+Route.get('/users', 'UsersController.index').middleware('auth')
