@@ -32,3 +32,7 @@ Route.post('/login', 'AuthController.login')
 
 // USER ROUTES
 Route.get('/users', 'UsersController.index').middleware('auth')
+
+// MESSAGE ROUTES
+Route.post('/messages', 'MessagesController.storeMessage').middleware('auth')
+Route.get('/messages', 'MessagesController.getMessages').middleware('auth')

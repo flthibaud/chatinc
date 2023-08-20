@@ -5,12 +5,16 @@ import {
   Action,
 } from "@reduxjs/toolkit";
 import { authSlice } from "./slice/authSlice";
+import { messageSlice } from "./slice/messageSlice";
+import { socketSlice } from "./slice/socketSlice";
 import { createWrapper } from "next-redux-wrapper";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
   [authSlice.name]: authSlice.reducer,
+  [messageSlice.name]: messageSlice.reducer,
+  [socketSlice.name]: socketSlice.reducer,
 });
 
 const makeConfiguredStore = () =>

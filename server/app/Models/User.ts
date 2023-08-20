@@ -8,6 +8,14 @@ export default class User extends BaseModel {
   @column()
   public email: string
 
+  @column({
+    serializeAs: null,
+  })
+  public password?: string
+
+  @column()
+  public avatar: string
+
   @column()
   public username: string
 
@@ -18,23 +26,30 @@ export default class User extends BaseModel {
   public lastName: string
 
   @column()
-  public avatar: string
+  public about: string
 
-  @column({
-    serializeAs: null,
-  })
-  public password?: string
+  @column()
+  public status: string
+
+  @column.dateTime({ autoCreate: true })
+  public lastSeen: DateTime
+
+  @column()
+  public receiveNotifications: boolean
 
   @column()
   public rememberMeToken?: string
+
+  @column()
+  public provider: string
 
   @column({
     serializeAs: null,
   })
   public providerId: string
 
-  @column()
-  public provider: string
+  @column.dateTime({ autoCreate: false })
+  public deletedAt: DateTime
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
