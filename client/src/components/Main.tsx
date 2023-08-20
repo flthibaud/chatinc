@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setMessages, addMessage } from '@/store/slice/messageSlice';
 import { setSocket } from '@/store/slice/socketSlice';
-import axios from 'axios';
+import { Message } from '@/types';
 import { io, Socket } from 'socket.io-client';
+import axios from 'axios';
 
 import Chatlist from './Chatlist/Chatlist';
 import Empty from './Empty';
@@ -13,7 +14,6 @@ const Main = () => {
   const dispatch = useAppDispatch();
   const { currentChatUser, userInfo } = useAppSelector(state => state.auth);
   let socketRef = useRef<Socket | null>(null);
-  const [socketEvent, setSocketEvent] = useState(false);
 
   useEffect(() => {
     if (!socketRef.current) {
@@ -28,9 +28,8 @@ const Main = () => {
   }, [dispatch, userInfo]);
 
   useEffect(() => {
-    if (socketRef.current && !socketEvent) {
-      const messageHandler = (data) => {
-        console.log(data);
+    if (socketRef.current) {
+      const messageHandler = (data: Message) => {
         dispatch(addMessage(data));
       };
   
@@ -42,14 +41,13 @@ const Main = () => {
         socketRef?.current?.off("msg-received", messageHandler);
       };
     }
-  }, [dispatch, socketEvent]);
+  }, [dispatch]);
   
 
   useEffect(() => {
     const getMessages = async () => {
       try {
         const { data } = await axios.get(`${process.env.NEXT_PUBLIC_NEXTJS_SITE_URL}/api/messages/get-messages?from=${userInfo?.id}&to=${currentChatUser?.id}`);
-        console.log(data)
         dispatch(setMessages(data));
       } catch (error) {
         console.log(error);

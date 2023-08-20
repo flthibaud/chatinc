@@ -16,6 +16,7 @@
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "cookie": "^0.5.0",
+    "emoji-picker-react": "^4.4.11",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "next": "13.4.12",

@@ -1,17 +1,40 @@
-import React, {useState} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FaMicrophone } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
 import { MdSend } from "react-icons/md";
+import { addMessage } from "@/store/slice/messageSlice";
+import EmojiPicker, {EmojiClickData, Theme} from "emoji-picker-react";
 import axios from "axios";
 
 const MessageBar = () => {
   const dispatch = useAppDispatch();
   const { userInfo, currentChatUser } = useAppSelector((state) => state.auth);
   const { socket } = useAppSelector((state) => state.socket);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
 
   const [message, setMessage] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  useEffect(() => {
+    // Fonction qui sera appelée lorsqu'un clic est détecté en dehors de l'emoji picker
+    const handleClickOutside = (e: MouseEvent) => {
+      // Vérifie si l'emoji picker existe et si l'événement de clic ne se produit pas à l'intérieur de celui-ci
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target as Node)) {
+        // Si les deux conditions sont vraies, définissez l'état showEmojiPicker sur false pour fermer l'emoji picker
+        setShowEmojiPicker(false);
+      }
+    };
+
+    // Ajoute un écouteur d'événements à l'objet document pour détecter les clics
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Retire l'écouteur d'événements lorsque le composant est démonté
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const sendMessage = async () => {
     try {
@@ -20,12 +43,20 @@ const MessageBar = () => {
         to: currentChatUser?.id,
         message,
       });
-      console.log("send-msg", data);
       socket.current?.emit("send-msg", data);
+      dispatch(addMessage(data));
       setMessage("");
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleEmojiModal = () => {
+    setShowEmojiPicker((prev) => !prev);
+  };
+
+  const handleEmojiClick = (emoji: EmojiClickData) => {
+    setMessage((prev) => prev += emoji.emoji);
   };
 
   return (
@@ -33,9 +64,19 @@ const MessageBar = () => {
       <>
         <div className="flex gap-6">
           <BsEmojiSmile
+            id="emoji-open"
             className="text-panel-header-icon cursor-pointer text-xl"
             title="Emoji"
+            onClick={handleEmojiModal}
           />
+          {showEmojiPicker && (
+            <div
+              ref={emojiPickerRef}
+              className="absolute bottom-24 left-16 z-40"
+            >
+              <EmojiPicker onEmojiClick={handleEmojiClick} theme={Theme.DARK} />
+            </div>
+          )}
           <ImAttachment
             className="text-panel-header-icon cursor-pointer text-xl"
             title="Attach file"

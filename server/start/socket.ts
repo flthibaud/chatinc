@@ -11,9 +11,7 @@ Ws.io.on('connection', (socket) => {
   })
 
   socket.on('send-msg', (data) => {
-    console.log(data)
     const sendUserSocket = onlineUsersService.getUser(data.receiver_id)
-    console.log(sendUserSocket)
     if (sendUserSocket) {
       socket.to(sendUserSocket).emit('msg-received', data)
     }

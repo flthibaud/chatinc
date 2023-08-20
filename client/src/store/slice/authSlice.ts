@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "../store";
 import { HYDRATE } from "next-redux-wrapper";
+import { User } from "../../types";
 
 // Type for our state
 export interface AuthState {
   authState: boolean;
-  userInfo: any;
+  userInfo: User | undefined;
   contactsPage: boolean;
-  currentChatUser: any;
+  currentChatUser: User | null;
 }
 
 // Initial state

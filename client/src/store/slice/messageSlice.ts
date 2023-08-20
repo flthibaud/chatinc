@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
+import { Message } from "../../types";
 
 // Type for our state
 export interface MessageState {
-  messages: any[];
+  messages: Message[];
 }
 
 // Initial state
@@ -17,12 +18,12 @@ export const messageSlice = createSlice({
   initialState,
   reducers: {
     setMessages(state, action) {
-      state.messages = action.payload;
+      state.messages = action.payload as Message[];
     },
     addMessage(state, action) {
       return {
         ...state,
-        messages: [...state.messages, action.payload],
+        messages: [...state.messages, action.payload] as Message[],
       }
     }
   },

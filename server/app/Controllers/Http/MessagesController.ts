@@ -11,13 +11,6 @@ export default class MessagesController {
 
       if (message && from && to) {
         // Vérifie que tous les paramètres sont présents
-        /*const newMessage = await Message.create({
-          message,
-          senderId: from,
-          receiverId: to,
-          messageStatus: getUser ? 'delivered' : 'sent', // Définit le statut du message en fonction de l'état de connexion de l'utilisateur destinataire
-        })*/
-
         const newMessage = new Message()
         newMessage.message = message
         newMessage.senderId = from
@@ -26,8 +19,6 @@ export default class MessagesController {
         newMessage.messageType = 'text'
 
         await newMessage.save() // Enregistre le nouveau message dans la base de données
-
-        console.log('new message =>', newMessage)
 
         return response.status(201).json(newMessage) // Renvoie le nouveau message créé
       } else {
