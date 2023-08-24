@@ -8,11 +8,18 @@ import { addMessage } from "@/store/slice/messageSlice";
 import EmojiPicker, {EmojiClickData, Theme} from "emoji-picker-react";
 import axios from "axios";
 
+import PhotoPicker from "../common/PhotoPicker";
+
+interface PhotoPickerRef {
+  triggerFileSelection: () => void;
+}
+
 const MessageBar = () => {
   const dispatch = useAppDispatch();
   const { userInfo, currentChatUser } = useAppSelector((state) => state.auth);
   const { socket } = useAppSelector((state) => state.socket);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const photoPickerRef = useRef<PhotoPickerRef | null>(null);
 
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -51,6 +58,36 @@ const MessageBar = () => {
     }
   };
 
+  const photoPickerOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+
+    try {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await axios.post(`/api/messages/sent-image-message`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        params: {
+          from: userInfo?.id,
+          to: currentChatUser?.id,
+        },
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAttachmentClick = () => {
+    photoPickerRef.current?.triggerFileSelection();
+  };
+
   const handleEmojiModal = () => {
     setShowEmojiPicker((prev) => !prev);
   };
@@ -80,6 +117,7 @@ const MessageBar = () => {
           <ImAttachment
             className="text-panel-header-icon cursor-pointer text-xl"
             title="Attach file"
+            onClick={handleAttachmentClick}
           />
         </div>
         <div className="w-full rounded-lg h-10 flex items-center">
@@ -102,6 +140,7 @@ const MessageBar = () => {
           </button>
         </div>
       </>
+      <PhotoPicker ref={photoPickerRef} onChange={photoPickerOnChange} />
     </div>
   );
 };

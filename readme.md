@@ -6,6 +6,17 @@ Ce projet vise à développer une plateforme de communication en français simil
 
 La plateforme est actuellement en développement, et de nouvelles fonctionnalités seront ajoutées progressivement.
 
+### Features
+- [x] messagerie instantanée
+  - [x] envoie de message texte
+  - [ ] liste de contacts
+  - [ ] envoie de fichier
+  - [ ] envoie de message vocal
+  - [ ] appel audio et vidéo
+  - [ ] message chiffré de bout en bout
+- [ ] social media
+- incoming ...
+
 ## Technologie
 
 Le backend de l'application est construit avec [AdonisJS](https://adonisjs.com/), un framework Node.js complet qui offre une architecture stable et cohérente pour construire des applications serveur.

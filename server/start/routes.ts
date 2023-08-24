@@ -36,3 +36,4 @@ Route.get('/users', 'UsersController.index').middleware('auth')
 // MESSAGE ROUTES
 Route.post('/messages', 'MessagesController.storeMessage').middleware('auth')
 Route.get('/messages', 'MessagesController.getMessages').middleware('auth')
+Route.post('/image-message', 'MessagesController.storeImageMessage').middleware('auth')
