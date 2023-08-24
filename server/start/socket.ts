@@ -16,4 +16,8 @@ Ws.io.on('connection', (socket) => {
       socket.to(sendUserSocket).emit('msg-received', data)
     }
   })
+
+  socket.on('joinGroup', (groupId) => {
+    socket.join(`groupchat:${groupId}`)
+  })
 })

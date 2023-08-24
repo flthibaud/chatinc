@@ -25,6 +25,7 @@ Route.get('/google-signin', 'GoogleSignInsController.redirect')
 //OAuth CALLBACK
 Route.get('/google-signin-callback', 'GoogleSignInsController.handleCallback')
 Route.get('/user', 'AuthController.getUser').middleware('auth')
+Route.get('/ws-ticket', 'AuthController.getWebSocketTicket').middleware('auth')
 
 // AUTH ROUTES
 Route.post('/register', 'AuthController.register')
@@ -37,3 +38,22 @@ Route.get('/users', 'UsersController.index').middleware('auth')
 Route.post('/messages', 'MessagesController.storeMessage').middleware('auth')
 Route.get('/messages', 'MessagesController.getMessages').middleware('auth')
 Route.post('/image-message', 'MessagesController.storeImageMessage').middleware('auth')
+
+// Routes for groups
+Route.group(() => {
+  Route.get('/groups', 'GroupsController.index')
+  Route.post('/groups', 'GroupsController.create')
+  Route.delete('/groups/:groupId', 'GroupsController.delete')
+}).middleware(['auth'])
+
+Route.group(() => {
+  Route.post('/groups/:groupId/messages', 'GroupMessagesController.create')
+  Route.get('/groups/:groupId/messages', 'GroupMessagesController.index')
+}).middleware(['auth', 'isGroupMember'])
+
+// Routes for group members
+Route.group(() => {
+  Route.get('/groups/:groupId/members', 'GroupMemberController.index')
+  Route.post('/groups/:groupId/members', 'GroupMemberController.create')
+  Route.delete('/group-members/:id', 'GroupMemberController.delete')
+}).middleware(['auth', 'isGroupMember'])

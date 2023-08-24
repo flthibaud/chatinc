@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BiArrowBack, BiSearchAlt2 } from "react-icons/bi";
+import { MdGroup } from "react-icons/md";
 import { useAppDispatch } from "@/store/hooks";
 import { setAllContactsPage } from "@/store/slice/authSlice";
 import axios from "axios";
@@ -51,6 +52,28 @@ const ContactsList = () => {
                 className="bg-transparent text-sm focus:outline-none text-white w-full"
                 placeholder="Search Contacts"
               />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div
+            className={`flex cursor-pointer items-center hover:bg-background-default-hover relative flex-none h-[72px]`}
+          >
+            <div className='flex flex-none justify-center w-[74px]'>
+              <div className="flex rounded-full bg-[#00a884] w-[48px] h-[48px] justify-center items-center">
+                <span>
+                  <MdGroup className="text-[#e9edef] cursor-pointer text-lg w-[24px] h-[24px]" />
+                </span>
+              </div>
+            </div>
+
+            <div className='flex min-h-full flex-col justify-center pr-2 w-full'>
+              <div className='flex justify-between'>
+                <div>
+                  <span className='text-white'>Nouveau Groupe</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -48,4 +48,20 @@ export default class AuthController {
       data: user,
     })
   }
+
+  public async getWebSocketTicket({ auth, response, request }) {
+    const user = auth.user!
+
+    const ticket = {
+      userId: user?.id,
+      ip: request.ip(),
+      timestamp: new Date().getTime(),
+      // Vous pouvez ajouter d'autres informations si nécessaire
+    }
+
+    // Stockez le ticket dans une base de données ou un cache avec une expiration
+    // Par exemple, vous pourriez utiliser Redis avec une expiration de 5 minutes
+
+    return response.json({ ticket })
+  }
 }

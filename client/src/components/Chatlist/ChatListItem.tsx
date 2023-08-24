@@ -17,20 +17,24 @@ const ChatListItem = ({data, isContactPage = false}) => {
 
   return (
     <div
-      className={`flex cursor-pointer items-center hover:bg-background-default-hover`}
+      className={`flex cursor-pointer items-center hover:bg-background-default-hover relative flex-none h-[72px]`}
       onClick={handleContactClick}
     >
-      <div className='min-w-fit px-5 pt-3 pb-1'>
-        <Avatar type="lg" image={data?.avatar} />
+      <div className='flex flex-none justify-center w-[74px]'>
+        <div className="flex rounded-full bg-[#00a884] w-[48px] h-[48px] justify-center items-center">
+          <span>
+            <Avatar type="lg" image={data?.avatar} />
+          </span>
+        </div>
       </div>
 
-      <div className='flex min-h-full flex-col justify-center mt-3 pr-2 w-full'>
+      <div className='flex min-h-full flex-col justify-center pr-2 w-full border-b border-conversation-border'>
         <div className='flex justify-between'>
           <div>
             <span className='text-white'>{data?.username}</span>
           </div>
         </div>
-        <div className='flex border-b border-conversation-border pb-2 pt-1 p3-2'>
+        <div className='flex pb-2 pt-1 p3-2'>
           <div className='flex justify-between w-full'>
             <span className='text-secondary line-clamp-1 text-sm'>{data?.about || "\u00A0"}</span>
           </div>
