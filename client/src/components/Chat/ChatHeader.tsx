@@ -1,5 +1,6 @@
 import React from "react";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { setMessagesSearch } from "@/store/slice/messageSlice";
 import { MdCall } from "react-icons/md";
 import { IoVideocam } from "react-icons/io5";
 import { BiSearchAlt2 } from "react-icons/bi";
@@ -8,6 +9,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import Avatar from "../common/Avatar";
 
 const ChatHeader = () => {
+  const dispatch = useAppDispatch();
   const { currentChatUser } = useAppSelector((state) => state.auth);
   return (
     <div className="h-16 px-4 py-3 flex justify-between items-center bg-panel-header-background z-10">
@@ -21,7 +23,10 @@ const ChatHeader = () => {
       <div className="flex gap-6">
         <MdCall className="text-panel-header-icon text-xl cursor-pointer" />
         <IoVideocam className="text-panel-header-icon text-xl cursor-pointer" />
-        <BiSearchAlt2 className="text-panel-header-icon text-xl cursor-pointer" />
+        <BiSearchAlt2
+          className="text-panel-header-icon text-xl cursor-pointer"
+          onClick={() => dispatch(setMessagesSearch(true))}
+        />
         <BsThreeDotsVertical className="text-panel-header-icon text-xl cursor-pointer" />
       </div>
     </div>

@@ -29,16 +29,16 @@ export const authSlice = createSlice({
       state.authState = action.payload;
     },
     setUserInfo(state, action) {
-      state.userInfo = action.payload;
+      state.userInfo = action.payload as User;
     },
     setAllContactsPage(state) {
       return {
         ...state,
-        contactsPage: !state.contactsPage,
+        contactsPage: !state.contactsPage as boolean,
       };
     },
     setCurrentChatUser(state, action) {
-      state.currentChatUser = action.payload;
+      state.currentChatUser = action.payload as User;
     },
   },
 

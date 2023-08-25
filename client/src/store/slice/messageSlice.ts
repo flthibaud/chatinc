@@ -5,11 +5,13 @@ import { Message } from "../../types";
 // Type for our state
 export interface MessageState {
   messages: Message[];
+  messageSearch: boolean;
 }
 
 // Initial state
 const initialState: MessageState = {
   messages: [],
+  messageSearch: false,
 };
 
 // Actual Slice
@@ -25,7 +27,10 @@ export const messageSlice = createSlice({
         ...state,
         messages: [...state.messages, action.payload] as Message[],
       }
-    }
+    },
+    setMessagesSearch(state, action) {
+      state.messageSearch = action.payload as boolean;
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -42,6 +47,7 @@ export const messageSlice = createSlice({
 export const {
   setMessages,
   addMessage,
+  setMessagesSearch,
 } = messageSlice.actions;
 
 export default messageSlice.reducer;

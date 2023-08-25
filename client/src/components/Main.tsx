@@ -9,10 +9,12 @@ import axios from 'axios';
 import Chatlist from './Chatlist/Chatlist';
 import Empty from './Empty';
 import Chat from './Chat/Chat';
+import SearchMessages from './Chat/SearchMessages';
 
 const Main = () => {
   const dispatch = useAppDispatch();
   const { currentChatUser, userInfo } = useAppSelector(state => state.auth);
+  const { messageSearch } = useAppSelector((state) => state.message);
   let socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
@@ -62,7 +64,12 @@ const Main = () => {
   return (
     <div className='grid grid-cols-main h-screen w-screen max-h-screen max-w-full overflow-hidden'>
       <Chatlist />
-      {currentChatUser ? <Chat /> : <Empty />}
+      {currentChatUser ? (
+        <div className={messageSearch ? "grid grid-cols-2" : "grid-cols-2"}>
+          <Chat />
+          {messageSearch && <SearchMessages />}
+        </div>
+      ) : <Empty />}
     </div>
   )
 }
