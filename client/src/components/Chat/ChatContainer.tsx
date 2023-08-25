@@ -5,6 +5,7 @@ import { Message } from "@/types";
 
 import MessageStatus from "../common/MessageStatus";
 import ImageMessage from "./ImageMessage";
+import VoiceMessage from "./VoiceMessage";
 
 const ChatContainer = () => {
   const { messages } = useAppSelector((state) => state.message);
@@ -36,6 +37,10 @@ const ChatContainer = () => {
 
                 {message.message_type === "image" && (
                   <ImageMessage message={message} />
+                )}
+
+                {message.message_type === "audio" && (
+                  <VoiceMessage message={message} />
                 )}
               </div>
             ))}

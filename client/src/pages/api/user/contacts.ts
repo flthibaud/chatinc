@@ -34,6 +34,6 @@ export default async function contacts( req: NextApiRequest, res: NextApiRespons
 
     res.status( 200 ).json( data );
   } catch (err) {
-    res.status( 401 ).json( { message: 'User unauthorized' });
+    res.status(err.response?.status || 500).json({ message: err.response?.data?.message || 'Internal Server Error' });
   }
 }

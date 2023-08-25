@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cookie from 'cookie';
+import { parse } from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { decodeBase64ToJson } from '@/utils/base64';
 
@@ -7,13 +7,23 @@ interface TokenObject {
   message: string;
 }
 
-export default async function sentMessages( req: NextApiRequest, res: NextApiResponse ) {
+export const config = {
+  api: {
+    bodyParser: false, // Disallow body parsing, consume as stream
+  },
+};
+
+export default async function sentAudioMessage( req: NextApiRequest, res: NextApiResponse ) {
   // await cookie
-  const cookies = cookie.parse( req?.headers?.cookie ? req.headers.cookie : '' );
+  const { headers: { cookie, ...rest }, method } = req;
+  const cookies = parse( cookie as string );
   const authToken = cookies.auth_token || '' ;
   const tokenObject = decodeBase64ToJson( authToken ) as TokenObject;
 
-  if ( req.method !== 'POST' ) {
+  const from = req.query.from as string;
+  const to = req.query.to as string;
+
+  if ( method !== 'POST' ) {
     res.setHeader( 'Allow', 'POST' );
     res.status( 405 ).json( { message: `Method ${req.method} not allowed` })
     return;
@@ -24,15 +34,15 @@ export default async function sentMessages( req: NextApiRequest, res: NextApiRes
     return;
   }
 
+  const headers = {
+    Authorization: `Bearer ${tokenObject.message}`,
+    'content-type': rest['content-type'], 
+    'content-length': rest['content-length']
+  }
+
   try {
-    const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messages`, {
-      message: req.body.message,
-      to: req.body.to,
-      from: req.body.from,
-    }, {
-      headers: {
-        Authorization: `Bearer ${tokenObject.message}`,
-      },
+    const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/audio-message?from=${from}&to=${to}`, req, {
+      headers: headers,
       withCredentials: true,
     });
 

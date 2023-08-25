@@ -9,6 +9,7 @@ import EmojiPicker, {EmojiClickData, Theme} from "emoji-picker-react";
 import axios from "axios";
 
 import PhotoPicker from "../common/PhotoPicker";
+import CaptureAudio from "../common/CaptureAudio";
 
 interface PhotoPickerRef {
   triggerFileSelection: () => void;
@@ -23,6 +24,7 @@ const MessageBar = () => {
 
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showAudioRecorder, setShowAudioRecorder] = useState(false);
 
   useEffect(() => {
     // Fonction qui sera appelée lorsqu'un clic est détecté en dehors de l'emoji picker
@@ -101,49 +103,59 @@ const MessageBar = () => {
 
   return (
     <div className="bg-panel-header-background h-20 px-4 flex items-center gap-6 relative">
-      <>
-        <div className="flex gap-6">
-          <BsEmojiSmile
-            id="emoji-open"
-            className="text-panel-header-icon cursor-pointer text-xl"
-            title="Emoji"
-            onClick={handleEmojiModal}
-          />
-          {showEmojiPicker && (
-            <div
-              ref={emojiPickerRef}
-              className="absolute bottom-24 left-16 z-40"
-            >
-              <EmojiPicker onEmojiClick={handleEmojiClick} theme={Theme.DARK} />
-            </div>
-          )}
-          <ImAttachment
-            className="text-panel-header-icon cursor-pointer text-xl"
-            title="Attach file"
-            onClick={handleAttachmentClick}
-          />
-        </div>
-        <div className="w-full rounded-lg h-10 flex items-center">
-          <input
-            type="text"
-            className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-full"
-            placeholder="Type a message"
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
-          />
-        </div>
-        <div className="flex w-10 items-center justify-center">
-          <button>
-            <MdSend
+      {!showAudioRecorder && (
+        <>
+          <div className="flex gap-6">
+            <BsEmojiSmile
+              id="emoji-open"
               className="text-panel-header-icon cursor-pointer text-xl"
-              title="Send message"
-              onClick={sendMessage}
+              title="Emoji"
+              onClick={handleEmojiModal}
             />
-            {/*<FaMicrophone className="text-panel-header-icon cursor-pointer text-xl" title="Record" />*/}
-          </button>
-        </div>
-      </>
+            {showEmojiPicker && (
+              <div
+                ref={emojiPickerRef}
+                className="absolute bottom-24 left-16 z-40"
+              >
+                <EmojiPicker onEmojiClick={handleEmojiClick} theme={Theme.DARK} />
+              </div>
+            )}
+            <ImAttachment
+              className="text-panel-header-icon cursor-pointer text-xl"
+              title="Attach file"
+              onClick={handleAttachmentClick}
+            />
+          </div>
+          <div className="w-full rounded-lg h-10 flex items-center">
+            <input
+              type="text"
+              className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-full"
+              placeholder="Type a message"
+              onChange={(e) => setMessage(e.target.value)}
+              value={message}
+            />
+          </div>
+          <div className="flex w-10 items-center justify-center">
+            <button>
+              {message.length > 0 ? (
+                <MdSend
+                  className="text-panel-header-icon cursor-pointer text-xl"
+                  title="Send message"
+                  onClick={sendMessage}
+                />
+              ) : (
+                <FaMicrophone
+                  className="text-panel-header-icon cursor-pointer text-xl"
+                  title="Record"
+                  onClick={() => setShowAudioRecorder(true)}
+                />
+              )}
+            </button>
+          </div>
+        </>
+      )}
       <PhotoPicker ref={photoPickerRef} onChange={photoPickerOnChange} />
+      {showAudioRecorder && <CaptureAudio hide={setShowAudioRecorder} />}
     </div>
   );
 };

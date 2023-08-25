@@ -16,7 +16,7 @@ export const config = {
 export default async function sentImageMessage( req: NextApiRequest, res: NextApiResponse ) {
   // await cookie
   const { headers: { cookie, ...rest }, method } = req;
-  const cookies = parse( cookie );
+  const cookies = parse( cookie as string );
   const authToken = cookies.auth_token || '' ;
   const tokenObject = decodeBase64ToJson( authToken ) as TokenObject;
 
@@ -48,6 +48,6 @@ export default async function sentImageMessage( req: NextApiRequest, res: NextAp
 
     res.status( 200 ).json( data );
   } catch (err) {
-    res.status( 401 ).json( { message: 'User unauthorized' });
+    res.status(err.response?.status || 500).json({ message: err.response?.data?.message || 'Internal Server Error' });
   }
 }

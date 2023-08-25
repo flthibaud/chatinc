@@ -80,10 +80,14 @@ export default class MessagesController {
           return response.status(400).json({ message: 'Invalid file type' }) // Renvoie une erreur si le fichier n'est pas valide
         }
 
-        await image.move('./uploads/images')
+        const newFileName = `${new Date().getTime()}.${image.extname}`
+
+        await image.move('./uploads/images', {
+          name: newFileName,
+        })
 
         const newMessage = new Message()
-        newMessage.message = image.fileName!
+        newMessage.message = newFileName
         newMessage.senderId = from
         newMessage.receiverId = to
         newMessage.messageStatus = 'sent'
@@ -94,6 +98,44 @@ export default class MessagesController {
         return response.status(201).json(newMessage) // Renvoie le nouveau message créé*/
       } else {
         return response.status(400).json({ message: 'From, to and image is required' }) // Renvoie une erreur si les paramètres sont manquants
+      }
+    } catch (error) {
+      console.log(error)
+      return response.status(500).json({ message: 'Internal server error' }) // Renvoie une erreur en cas d'erreur interne du serveur
+    }
+  }
+
+  public async storeAudioMessage({ request, response }: HttpContextContract) {
+    try {
+      const { from, to } = request.qs() // Récupère les paramètres de la requête
+      const audio = request.file('audio', {
+        size: '5mb',
+        extnames: ['mp3', 'wav', 'webm'],
+      }) // Récupère le fichier audio envoyé
+
+      if (audio && from && to) {
+        if (!audio.isValid) {
+          return response.status(400).json({ message: 'Invalid file type' }) // Renvoie une erreur si le fichier n'est pas valide
+        }
+
+        const newFileName = `${new Date().getTime()}.${audio.extname}`
+
+        await audio.move('./uploads/audios', {
+          name: newFileName,
+        })
+
+        const newMessage = new Message()
+        newMessage.message = newFileName
+        newMessage.senderId = from
+        newMessage.receiverId = to
+        newMessage.messageStatus = 'sent'
+        newMessage.messageType = 'audio'
+
+        await newMessage.save() // Enregistre le nouveau message dans la base de données
+
+        return response.status(201).json(newMessage) // Renvoie le nouveau message créé*/
+      } else {
+        return response.status(400).json({ message: 'From, to and audio is required' }) // Renvoie une erreur si les paramètres sont manquants
       }
     } catch (error) {
       console.log(error)
