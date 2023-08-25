@@ -38,6 +38,7 @@ Route.get('/users', 'UsersController.index').middleware('auth')
 Route.post('/messages', 'MessagesController.storeMessage').middleware('auth')
 Route.get('/messages', 'MessagesController.getMessages').middleware('auth')
 Route.post('/image-message', 'MessagesController.storeImageMessage').middleware('auth')
+Route.get('/uploads/images/:filename', 'ImageController.show')
 
 // Routes for groups
 Route.group(() => {

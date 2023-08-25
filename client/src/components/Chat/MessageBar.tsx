@@ -78,7 +78,10 @@ const MessageBar = () => {
         },
       });
 
-      console.log(response);
+      if (response.status === 200) {
+        socket.current?.emit("send-msg", response.data);
+        dispatch(addMessage(response.data));
+      }
     } catch (error) {
       console.log(error);
     }

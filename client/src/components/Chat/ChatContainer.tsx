@@ -4,6 +4,7 @@ import { calculateTime } from "@/utils/calculateTime";
 import { Message } from "@/types";
 
 import MessageStatus from "../common/MessageStatus";
+import ImageMessage from "./ImageMessage";
 
 const ChatContainer = () => {
   const { messages } = useAppSelector((state) => state.message);
@@ -31,6 +32,10 @@ const ChatContainer = () => {
                       </span>
                     </div>
                   </div>
+                )}
+
+                {message.message_type === "image" && (
+                  <ImageMessage message={message} />
                 )}
               </div>
             ))}
